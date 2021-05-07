@@ -1,4 +1,4 @@
-extends KnematicBody2D
+extends KinematicBody2D
 
 
 # Declare member variables here. Examples:
@@ -19,16 +19,21 @@ var debug = false
 var BUTTON_LEFT = 1
 var offset_tile = Vector2(5, -14)
 var orig_pos = Vector2()
+var pos_dict = {}
+
+var postion_dict = preload("res://Scripts/GlobalVariables.gd")
 
 		
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	pos_dict[Vector2(1,2)] = self
 	tsize=$Image.get_size()
 	set_process_input(true)
 	set_process(true)
 
 	update_type(all_types[val])
+	print(pos_dict[Vector2(1,2)])
 	
 func update_type(new_type):
 	if new_type == atom_type:
@@ -97,8 +102,6 @@ func _process(delta):
 		new=false
 
 func get_snapping_pos():
-	print(get_node("/root").get_child(0).get_child(0).get_path())
-	print(get_node("/root").get_child(0).get_child(0).get_child(0).get_path())
 	var mouse_pos = get_node("/root/main/Tiles/Tilemap").world_to_map(get_global_mouse_position())
 	self.global_position = get_node("/root/main/Tiles/Tilemap").map_to_world(mouse_pos)
 	self.global_position = 	self.global_position+offset_tile
