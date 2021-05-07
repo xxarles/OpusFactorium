@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scenes/SelectMenu.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/Tiles.tscn" type="PackedScene" id=2]
+
+[node name="main" type="Node2D"]
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Tiles" parent="." instance=ExtResource( 2 )]
+
+[node name="SelectMenu" parent="." instance=ExtResource( 1 )]
+margin_right = 1026.0
+margin_bottom = 600.0
+size_flags_horizontal = 1
+size_flags_vertical = 1

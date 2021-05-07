@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scenes/SpawnAtom.gd" type="Script" id=2]
+
+[node name="SpawnAtom" type="MarginContainer"]
+margin_right = 75.0
+margin_bottom = 75.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SpawnButton" type="Button" parent="."]
+show_behind_parent = true
+margin_right = 75.0
+margin_bottom = 75.0
+rect_min_size = Vector2( 75, 75 )
+mouse_filter = 1
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "ATOM"
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="button_down" from="SpawnButton" to="SpawnButton" method="_on_SpawnButton_button_down"]
