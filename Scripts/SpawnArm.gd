@@ -25,12 +25,10 @@ func _ready():
 func spawn_new():
 	var new_arm = ARM.instance()
 	
-	#new_atom.set_position(Vector2d())
 	get_node("/root/").add_child(new_arm)
 	new_arm.status = "dragging"
 	
 	new_arm.position = self.get_global_position()
-	#new_atom.offset_ = new_atom.global_position 
 
 
 func _on_SpawnButton_spawn_atom():

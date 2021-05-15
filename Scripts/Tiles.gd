@@ -8,9 +8,16 @@ var BUTTON_MIDDLE = 3
 var offset_ = Vector2()
 var evpos
 var gpos
+var t_map
+var tilling
+var shades
+var gvars
+
 
 func _ready():
-	pass # Replace with function body.
+	t_map= get_node("./Tilemap")
+	tilling = get_node("./Tilling")
+	shades = get_node("./Shades")
 
 
 func _process(delta):
@@ -18,11 +25,12 @@ func _process(delta):
 
 		var new_pos = evpos - self.get_global_mouse_position()
 		real_pos = real_pos - new_pos
-		get_node("./Shades").global_position =  Vector2(int(real_pos.x)%(82*10), int(real_pos.y)%(71*10))
-		get_node("./Tilling").global_position =  Vector2(int(real_pos.x)%(82*10), int(real_pos.y)%(71*10))
-		get_node("./Tilemap").global_position =  real_pos
+		shades.global_position =  Vector2(int(real_pos.x)%(82*10), int(real_pos.y)%(71*10))
+		tilling.global_position =  Vector2(int(real_pos.x)%(82*10), int(real_pos.y)%(71*10))
+		t_map.global_position =  real_pos
 		emit_signal("pos_changes", -new_pos)
 		evpos = self.get_global_mouse_position()
+		#gvars.update_all_pos(- new_pos)
 		
 		
 	
@@ -40,6 +48,4 @@ func _input(ev):
 		if not ev.is_pressed():
 			
 			status="released"
-			
-	
-	
+

@@ -20,20 +20,19 @@ var BUTTON_LEFT = 1
 var offset_tile = Vector2(5, -14)
 var orig_pos = Vector2()
 var pos_dict = {}
+var tile_pos = false
+var glob
+var spriterect
 
-var postion_dict = preload("res://Scripts/GlobalVariables.gd")
-
-		
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pos_dict[Vector2(1,2)] = self
+	glob = get_node("/root/GlobalVariables")
 	tsize=$Image.get_size()
 	set_process_input(true)
 	set_process(true)
 
 	update_type(all_types[val])
-	print(pos_dict[Vector2(1,2)])
 	
 func update_type(new_type):
 	if new_type == atom_type:
@@ -83,53 +82,52 @@ func _on_Image_mouse_entered():
 func _process(delta):
 	if status == "dragging" and new == false:
 		if debug:
-			print("NEW2")
-			print(position)
-			print(get_global_mouse_position())
-			print(offset_)
 			debug=false
 		
 		position = get_global_mouse_position() + offset_
 		#self.global_position = offset_
 		
 	elif new:
-		print("NEW")
-		print(position)
-		print(get_global_mouse_position())
-		print(offset_)
-		debug = true
 		offset_ = position - get_global_mouse_position()
 		new=false
 
-func get_snapping_pos():
-	var mouse_pos = get_node("/root/main/Tiles/Tilemap").world_to_map(get_global_mouse_position())
-	self.global_position = get_node("/root/main/Tiles/Tilemap").map_to_world(mouse_pos)
-	self.global_position = 	self.global_position+offset_tile
 	
+func set_position_with_offset(pos):
+	self.global_position = pos + offset_tile
 	
+func update_pos(diff):
+	self.global_position = self.global_position + diff
+	
+func dropped():
+	var success = glob.add_atom(self)
+	if not success:
+		self.queue_free()
+	update_rect()
+	status="released"
+
+func update_rect():
+	gpos=self.global_position
+	spriterect = Rect2(gpos.x, gpos.y, tsize.x, tsize.y)
+	
+func grabbed(pos):
+	gpos=self.global_position		
+	if spriterect.has_point(pos):
+		status="clicked"
+		offset_=gpos-pos
+		glob.remove_atom(self.tile_pos)
 
 func _input(ev):
-		
-	if ev is InputEventMouseButton  and ev.button_index == BUTTON_LEFT and ev.is_pressed() and (status != "dragging" or new==true or debug):
-		print("START DRAG")
-		var evpos=ev.position
-		gpos=self.global_position
-		var spriterect
-		spriterect=Rect2(gpos.x, gpos.y, tsize.x, tsize.y)
-			
-		if spriterect.has_point(evpos):
-			print("CLICKED")
-			status="clicked"
-			offset_=gpos-evpos
+	if ev is InputEventMouseButton  and ev.button_index == BUTTON_LEFT and ev.is_pressed() and (status != "dragging" or new==true):
+		grabbed(ev.position)
 
 	if status=="clicked" and ev is InputEventMouseButton :
 		status="dragging"
 
 	if status=="dragging" and ev is InputEventMouseButton  and ev.button_index == BUTTON_LEFT:
 		if not ev.is_pressed():
-			status="released"
-			get_snapping_pos()
-
+			dropped()
+			
+				
 	mpos=ev.global_position
 
 
