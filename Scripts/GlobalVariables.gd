@@ -16,8 +16,15 @@ func _ready():
 	
 	
 	
-func add_atom(atom):
-	var tile_pos = self.world_to_map(get_global_mouse_position())
+func add_atom(atom, type = "mouse"):
+	var tile_pos
+	if type == "mouse":
+		tile_pos = self.world_to_map(get_global_mouse_position())
+	else:
+		tile_pos = self.world_to_map(atom.global_position + Vector2(20,20))
+	
+	print(atom.global_position)
+	print(tile_pos)
 	
 	if tile_pos in atoms or tile_pos in arms or tile_pos in tiles:
 		if not atom.tile_pos:
@@ -34,8 +41,12 @@ func add_atom(atom):
 func remove_atom(tile_pos):
 	atoms.erase(tile_pos)
 
-func add_arm(arm):
-	var tile_pos = self.world_to_map(get_global_mouse_position())
+func add_arm(arm, type = "mouse"):
+	var tile_pos	
+	if type == "mouse":
+		tile_pos = self.world_to_map(get_global_mouse_position())
+	else:
+		tile_pos = self.world_to_map(arm.global_position + Vector2(5,5))
 	
 	if tile_pos in atoms or tile_pos in arms or tile_pos in tiles:
 		if not arm.tile_pos:
@@ -50,3 +61,10 @@ func add_arm(arm):
 	
 func remove_arm(tile_pos):
 	arms.erase(tile_pos)
+
+
+func grab_atoms(tile):
+	if tile in atoms:
+		return atoms[tile]
+	else:
+		return false

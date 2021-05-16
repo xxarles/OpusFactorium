@@ -11,7 +11,7 @@ __meta__ = {
 [node name="Tiles" parent="." instance=ExtResource( 2 )]
 
 [node name="SelectMenu" parent="." instance=ExtResource( 1 )]
-margin_right = 1026.0
+margin_right = 77.0
 margin_bottom = 600.0
 size_flags_horizontal = 1
 size_flags_vertical = 1

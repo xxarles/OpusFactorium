@@ -20,6 +20,7 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 margin_right = 74.0
 margin_bottom = 74.0
+rect_pivot_offset = Vector2( -50, -50 )
 __meta__ = {
 "_edit_group_": true,
 "_edit_use_anchors_": false
@@ -80,5 +81,7 @@ format = 1
 position = Vector2( 37, 37 )
 rotation = -1.52891
 shape = SubResource( 1 )
+
+[node name="ArcMove" type="Tween" parent="."]
 
 [connection signal="mouse_entered" from="Image" to="." method="_on_Image_mouse_entered"]

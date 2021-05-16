@@ -22,12 +22,54 @@ var glob
 var spriterect
 var tile_pos = false
 export var arms = 1
+export var arm_length = 1
+
+var map_reach = null
+var grabbed_atoms = []
+
+var old_rot
 
 
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
-
+func update_reach_maps():
+	var temp_odd = [Vector2(+1,0),Vector2(+0,-1),Vector2(-1,-1),
+						Vector2(-1,0),Vector2(-1,+1),Vector2(+0,+1)]
+	var temp_even = [Vector2(+1,0),Vector2(+1,-1),Vector2(+0,-1),
+						Vector2(-1,0),Vector2(+0,+1),Vector2(+1,+1)]
+	
+	map_reach = [tile_pos, tile_pos, tile_pos, tile_pos, tile_pos, tile_pos]
+	for j in range(arm_length):
+		var temp = int(self.tile_pos[1]+j)%2 
+		for i in range(6):
+			if temp:
+				map_reach[i] = map_reach[i] + temp_odd[i]
+			else:
+				map_reach[i] = map_reach[i] + temp_even[i]
+				
+func get_ring_positions():
+	
+	if arms == 1:
+		return [map_reach[direction]]
+	if arms == 2:
+		return [map_reach[direction], map_reach[(direction+3)%6]]
+	if arms == 3:
+		return [map_reach[direction], map_reach[(direction+2)%6], map_reach[(direction+2)%6]]
+	if arms == 6:
+		return [map_reach[direction], map_reach[(direction+1)%6], map_reach[(direction+2)%6], 
+				map_reach[(direction+3)%6], map_reach[(direction+4)%6], map_reach[(direction+5)%6]]
+				
+func grab_atoms():
+	
+	for pos in get_ring_positions():
+		var atom = glob.grab_atoms(pos)
+		if atom:
+			grabbed_atoms.append(atom)
+			
+func release_atoms():
+	grabbed_atoms = []
+		
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -53,6 +95,7 @@ func _process(delta):
 		offset_ = position - get_global_mouse_position()
 		new=false
 
+
 func get_snapping_pos():
 	var mouse_pos = get_node("/root/main/Tiles/Tilemap").world_to_map(get_global_mouse_position())
 	self.global_position = get_node("/root/main/Tiles/Tilemap").map_to_world(mouse_pos)
@@ -61,30 +104,42 @@ func get_snapping_pos():
 
 func set_position_with_offset(pos):
 	self.global_position = pos + offset_tile
-	
+
+
 func update_pos(diff):
 	self.global_position = self.global_position + diff
-	
+
+
 func dropped():
 	var success = glob.add_arm(self)
 	if not success:
 		self.queue_free()
 	update_rect()
+	update_reach_maps()	
 	status="released"
+
 
 func update_rect():
 	gpos=self.global_position
 	spriterect = Rect2(gpos.x, gpos.y, tsize.x, tsize.y)
-	
+
+
 func grabbed(pos):
 	if spriterect.has_point(pos):
 		status="clicked"
 		offset_=gpos-pos
-	
 		glob.remove_arm(self.tile_pos)
+	
 
-
-
+func rotate(clockwise=1):
+	var final = direction + clockwise
+	old_rot = deg2rad(-direction * 60)
+	tween_rotation.interpolate_property($ArmImage, "rect_rotation", -direction* 60, -(final) * 60, 1)
+	tween_rotation.start()
+	direction = final % 6
+	
+	
+	
 func _input(ev):
 
 	if ev is InputEventMouseButton  and ev.button_index == BUTTON_LEFT and ev.is_pressed() and (status != "dragging" or new==true):
@@ -99,11 +154,33 @@ func _input(ev):
 
 	mpos=ev.global_position
 
-	if ev is InputEventMouseButton  and ev.button_index == BUTTON_RIGHT and not tween_rotation.is_active():
-		tween_rotation.interpolate_property(self, "rect_rotation", direction* 60, (direction+1) * 60, 1)
-		tween_rotation.start()
-		direction += 1
-		pass
+	if ev is InputEventMouseButton  and ev.button_index == BUTTON_RIGHT and not tween_rotation.is_active() and ev.is_pressed():
+		grab_atoms()
+		rotate(1)
+		
+		
 
 
 
+
+
+func _on_Tween_tween_step(object, key, elapsed, value):
+	var new_rot = deg2rad(value)
+	var delta = Vector2(cos(new_rot)-cos(old_rot), 
+					sin(new_rot)-sin(old_rot))
+	for atom in grabbed_atoms:
+		var dist = atom.global_position - self.global_position
+		print(self.global_position)
+		print(atom.global_position)
+		#print(delta.abs())
+		#print(dist)
+		atom.global_position += (delta * (dist.length()))
+	old_rot = new_rot
+
+
+func _on_Tween_tween_completed(object, key):
+	for atom in grabbed_atoms:
+		atom.update_tile()
+	release_atoms()
+	get_ring_positions()
+	

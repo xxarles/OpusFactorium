@@ -63,7 +63,10 @@ func update_type(new_type):
 		
 	
 
-
+func arc_move(clockwise, pivot):
+	pass
+	
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -104,6 +107,12 @@ func dropped():
 		self.queue_free()
 	update_rect()
 	status="released"
+	
+func update_tile():
+	glob.remove_atom(self.tile_pos)
+	glob.add_atom(self, "position")
+	update_rect()
+	print(self.tile_pos)
 
 func update_rect():
 	gpos=self.global_position
