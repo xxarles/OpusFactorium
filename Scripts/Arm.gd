@@ -170,10 +170,6 @@ func _on_Tween_tween_step(object, key, elapsed, value):
 					sin(new_rot)-sin(old_rot))
 	for atom in grabbed_atoms:
 		var dist = atom.global_position - self.global_position
-		print(self.global_position)
-		print(atom.global_position)
-		#print(delta.abs())
-		#print(dist)
 		atom.global_position += (delta * (dist.length()))
 	old_rot = new_rot
 

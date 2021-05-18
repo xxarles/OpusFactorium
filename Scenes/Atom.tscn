@@ -1,13 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/Atom.gd" type="Script" id=1]
 [ext_resource path="res://assets/textures/atoms/shadow.png" type="Texture" id=2]
 [ext_resource path="res://assets/textures/atoms/salt_shade.png" type="Texture" id=3]
 [ext_resource path="res://assets/textures/atoms/salt_symbol.png" type="Texture" id=4]
 [ext_resource path="res://assets/textures/atoms/salt_diffuse.png" type="Texture" id=5]
-
-[sub_resource type="CircleShape2D" id=1]
-radius = 28.9463
 
 [node name="Atom" type="KinematicBody2D"]
 input_pickable = true
@@ -21,6 +18,7 @@ anchor_bottom = 0.5
 margin_right = 74.0
 margin_bottom = 74.0
 rect_pivot_offset = Vector2( -50, -50 )
+mouse_filter = 2
 __meta__ = {
 "_edit_group_": true,
 "_edit_use_anchors_": false
@@ -70,18 +68,3 @@ stretch_mode = 4
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="mapping" type="TileMap" parent="."]
-cell_size = Vector2( 82, 71 )
-cell_custom_transform = Transform2D( 82, 0, 0, 71, 0, 0 )
-cell_half_offset = 3
-format = 1
-
-[node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2( 37, 37 )
-rotation = -1.52891
-shape = SubResource( 1 )
-
-[node name="ArcMove" type="Tween" parent="."]
-
-[connection signal="mouse_entered" from="Image" to="." method="_on_Image_mouse_entered"]

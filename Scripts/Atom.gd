@@ -31,7 +31,8 @@ func _ready():
 	tsize=$Image.get_size()
 	set_process_input(true)
 	set_process(true)
-
+	update_rect()
+	
 	update_type(all_types[val])
 	
 func update_type(new_type):
@@ -63,10 +64,7 @@ func update_type(new_type):
 		
 	
 
-func arc_move(clockwise, pivot):
-	pass
-	
-	
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -77,7 +75,6 @@ func _on_Image_mouse_entered():
 	val +=1
 	val %= len(all_types)
 	update_type(all_types[val])
-	
 	pass # Replace with function body.
 	
 	
@@ -107,12 +104,6 @@ func dropped():
 		self.queue_free()
 	update_rect()
 	status="released"
-	
-func update_tile():
-	glob.remove_atom(self.tile_pos)
-	glob.add_atom(self, "position")
-	update_rect()
-	print(self.tile_pos)
 
 func update_rect():
 	gpos=self.global_position

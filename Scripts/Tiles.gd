@@ -13,8 +13,10 @@ var tilling
 var shades
 var gvars
 
+var glob 
 
 func _ready():
+	glob = get_node("/root/GlobalVariables")
 	t_map= get_node("./Tilemap")
 	tilling = get_node("./Tilling")
 	shades = get_node("./Shades")
@@ -30,6 +32,7 @@ func _process(delta):
 		t_map.global_position =  real_pos
 		emit_signal("pos_changes", -new_pos)
 		evpos = self.get_global_mouse_position()
+		glob.move_background(-new_pos)
 		#gvars.update_all_pos(- new_pos)
 		
 		
