@@ -31,7 +31,7 @@ func spawn_new():
 	get_node("/root/").add_child(new_glyph)
 	new_glyph.status = "dragging"
 	#"adding to position!", self.get_global_mouse_position())
-	new_glyph.position = self.get_global_mouse_position() + Vector2(3,3)
+	new_glyph.position = self.get_global_mouse_position() - Vector2(30,30)
 	
 	#var ev = InputEventMouseButton.new()
 	# Set as move_left, pressed.

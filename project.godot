@@ -26,7 +26,10 @@ config/icon="res://icon.png"
 
 [autoload]
 
-GlobalVariables="*res://Scripts/GlobalVariables.gd"
+GlobalVariables="*res://Scripts/global_handlers/GlobalVariables.gd"
+AtomHandler="*res://Scripts/global_handlers/AtomHandler.gd"
+ArmHandler="*res://Scripts/global_handlers/ArmHandler.gd"
+ProjectionGlyphHandler="*res://Scripts/global_handlers/ProjectionGlyphHandler.gd"
 
 [gdnative]
 

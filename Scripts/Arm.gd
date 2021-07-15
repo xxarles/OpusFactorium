@@ -19,6 +19,7 @@ var tween_rotation
 var direction = 0
 var size = 0
 var glob
+var handler
 var spriterect
 var tile_pos = false
 export var arms = 1
@@ -29,24 +30,19 @@ var grabbed_atoms = []
 
 var old_rot
 
-
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-func update_reach_maps():
-	var temp_odd = [Vector2(+1,0),Vector2(+0,-1),Vector2(-1,-1),
-						Vector2(-1,0),Vector2(-1,+1),Vector2(+0,+1)]
-	var temp_even = [Vector2(+1,0),Vector2(+1,-1),Vector2(+0,-1),
-						Vector2(-1,0),Vector2(+0,+1),Vector2(+1,+1)]
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	glob = get_node("/root/GlobalVariables")
+	handler = get_node("/root/ArmHandler")
+	tween_rotation = get_node("Tween")
+	tsize = $PickArea.get_size()
+	pass # Replace with function body.
 	
-	map_reach = [tile_pos, tile_pos, tile_pos, tile_pos, tile_pos, tile_pos]
-	for j in range(arm_length):
-		var temp = int(self.tile_pos[1]+j)%2 
-		for i in range(6):
-			if temp:
-				map_reach[i] = map_reach[i] + temp_odd[i]
-			else:
-				map_reach[i] = map_reach[i] + temp_even[i]
+	
+func update_reach_maps():
+	self.map_reach = glob.create_reach(self.tile_pos, self.arm_length)
+	
+	
 				
 func get_ring_positions():
 	
@@ -63,34 +59,26 @@ func get_ring_positions():
 func grab_atoms():
 	
 	for pos in get_ring_positions():
-		var atom = glob.grab_atoms(pos)
+		var atom = handler.grab_atoms(pos)
 		if atom:
 			grabbed_atoms.append(atom)
 	
 	for atom in grabbed_atoms:
-		glob.remove_atom(atom)
+		atom.remove_self()
 			
 func release_atoms():
 	grabbed_atoms = []
 		
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	glob = get_node("/root/GlobalVariables")
-	tween_rotation = get_node("Tween")
-	tsize = $PickArea.get_size()
-	pass # Replace with function body.
 
 
 func _process(delta):
 	if status == "dragging" and not new:
-		#print("dragging")
 		if debug:
 			debug=false
 		
 		position = get_global_mouse_position() + offset_
 		self.global_position = position
-		#print(self.rect_global_position)
 		
 	elif new:
 		# Fix for dragging the arm from the spawn button
@@ -114,7 +102,7 @@ func update_pos(diff):
 
 
 func dropped():
-	var success = glob.add_arm(self)
+	var success = handler.add_arm(self)
 	if not success:
 		self.queue_free()
 	update_rect()
@@ -131,7 +119,7 @@ func grabbed(pos):
 	if spriterect.has_point(pos):
 		status="clicked"
 		offset_=gpos-pos
-		glob.remove_arm(self.tile_pos)
+		handler.remove_arm(self.tile_pos)
 	
 
 func rotate(clockwise=1):

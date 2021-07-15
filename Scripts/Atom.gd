@@ -22,12 +22,14 @@ var orig_pos = Vector2()
 var pos_dict = {}
 var tile_pos = false
 var glob
+var handler
 var spriterect
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	glob = get_node("/root/GlobalVariables")
+	handler = get_node("/root/AtomHandler")
 	tsize=$Image.get_size()
 	set_process_input(true)
 	set_process(true)
@@ -82,8 +84,8 @@ func _on_Image_mouse_entered():
 func _process(delta):
 	if status == "dragging" and new == false:
 		if debug:
+			debug=delta
 			debug=false
-		
 		position = get_global_mouse_position() + offset_
 		#self.global_position = offset_
 		
@@ -99,7 +101,7 @@ func update_pos(diff):
 	self.global_position = self.global_position + diff
 	
 func dropped(type="mouse"):
-	var success = glob.add_atom(self, type)
+	var success = handler.add_atom(self, type)
 	if not success:
 		self.queue_free()
 	else:
@@ -116,7 +118,11 @@ func grabbed(pos):
 	if spriterect.has_point(pos):
 		status="clicked"
 		offset_=gpos-pos
-		glob.remove_atom(self)
+		handler.remove_atom(self)
+
+func remove_self():
+	handler.remove_atom(self)
+
 	
 
 func _input(ev):
