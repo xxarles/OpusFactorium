@@ -8,9 +8,9 @@ extends TileMap
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print("DEBUG")
-	print(self.get_transform())
-	print(self.cell_size)
+	#print("DEBUG")
+	#print(self.get_transform())
+	#print(self.cell_size)
 	pass # Replace with function body.
 
 

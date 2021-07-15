@@ -66,6 +66,9 @@ func grab_atoms():
 		var atom = glob.grab_atoms(pos)
 		if atom:
 			grabbed_atoms.append(atom)
+	
+	for atom in grabbed_atoms:
+		glob.remove_atom(atom)
 			
 func release_atoms():
 	grabbed_atoms = []
@@ -176,7 +179,7 @@ func _on_Tween_tween_step(object, key, elapsed, value):
 
 func _on_Tween_tween_completed(object, key):
 	for atom in grabbed_atoms:
-		atom.update_tile()
+		atom.dropped("arm_move")
 	release_atoms()
 	get_ring_positions()
 	

@@ -98,10 +98,12 @@ func set_position_with_offset(pos):
 func update_pos(diff):
 	self.global_position = self.global_position + diff
 	
-func dropped():
-	var success = glob.add_atom(self)
+func dropped(type="mouse"):
+	var success = glob.add_atom(self, type)
 	if not success:
 		self.queue_free()
+	else:
+		pass
 	update_rect()
 	status="released"
 
@@ -114,7 +116,8 @@ func grabbed(pos):
 	if spriterect.has_point(pos):
 		status="clicked"
 		offset_=gpos-pos
-		glob.remove_atom(self.tile_pos)
+		glob.remove_atom(self)
+	
 
 func _input(ev):
 	if ev is InputEventMouseButton  and ev.button_index == BUTTON_LEFT and ev.is_pressed() and (status != "dragging" or new==true):

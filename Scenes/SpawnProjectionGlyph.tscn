@@ -13,13 +13,13 @@ __meta__ = {
 
 [node name="SpawnButton" type="Button" parent="."]
 show_behind_parent = true
-margin_right = 75.0
+margin_right = 117.0
 margin_bottom = 75.0
 rect_min_size = Vector2( 75, 75 )
 mouse_filter = 1
 size_flags_horizontal = 4
 size_flags_vertical = 4
-text = "ATOM"
+text = "Projection_glyph"
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false

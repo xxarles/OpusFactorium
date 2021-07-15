@@ -1,21 +1,16 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/textures/parts/projection_glyph/base.png" type="Texture" id=1]
 [ext_resource path="res://assets/textures/parts/projection_glyph/bond.png" type="Texture" id=2]
 [ext_resource path="res://assets/textures/parts/projection_glyph/metal_bowl.png" type="Texture" id=3]
 [ext_resource path="res://Scripts/ProjectionGlyph.gd" type="Script" id=4]
 
-[sub_resource type="CapsuleShape2D" id=1]
-radius = 42.2331
-height = 80.3544
-
-[node name="ProjectionGlyph" type="Area2D"]
+[node name="ProjectionGlyph" type="KinematicBody2D"]
 script = ExtResource( 4 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 82.5248, 47.247 )
-rotation = 1.5708
-shape = SubResource( 1 )
+[node name="MyArea" type="CollisionPolygon2D" parent="."]
+z_index = 4
+polygon = PoolVector2Array( 41.6286, 1.20728, 80.9566, 25.1188, 123.116, -0.365845, 163.388, 23.231, 164.332, 71.3686, 124.06, 93.3923, 83.159, 69.1662, 42.8871, 94.0216, 2.30048, 70.7393, 2.30048, 25.748 )
 
 [node name="Container" type="Container" parent="."]
 margin_right = 164.0
@@ -69,5 +64,3 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="."]
-
-[connection signal="input_event" from="." to="." method="_on_ProjectionGlyph_input_event"]

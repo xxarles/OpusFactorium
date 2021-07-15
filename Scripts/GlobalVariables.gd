@@ -57,8 +57,8 @@ func add_atom(atom, type = "mouse"):
 	
 	return true
 
-func remove_atom(tile_pos):
-	atoms.erase(tile_pos)
+func remove_atom(atom):
+	atoms.erase(atom.tile_pos)
 
 func add_arm(arm, type = "mouse"):
 	var tile_pos	
