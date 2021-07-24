@@ -34,7 +34,6 @@ func _ready():
 	tsize=$Image.get_size()
 	set_process_input(true)
 	set_process(true)
-	update_rect()
 	new = true
 	
 	update_type(all_types[val])
@@ -104,19 +103,26 @@ func set_position_with_offset(pos):
 func update_pos(diff):
 	self.global_position = self.global_position + diff
 	
-func dropped(type="mouse"):
-	var success = handler.add_atom(self, type)
+func dropped():
+	var success = handler.add_atom(self, "mouse")
 	if not success:
 		self.queue_free()
 	else:
 		pass
-	update_rect()
 	self.z_index = orig_z
 	status="released"
 
-func update_rect():
-	gpos=self.global_position
-	spriterect = Rect2(gpos.x, gpos.y, tsize.x, tsize.y)
+func arm_release():
+	var success = handler.add_atom(self, "arm")
+	if not success:
+		self.queue_free()
+	else:
+		pass
+	status="released"
+
+# func update_rect():
+# 	gpos=self.global_position
+# 	spriterect = Rect2(gpos.x, gpos.y, tsize.x, tsize.y)
 
 
 func is_in_image(pos):
@@ -126,6 +132,7 @@ func is_in_image(pos):
 		if x["collider_id"] == self.get_instance_id():
 			return true
 	return false
+
 func grabbed(pos):
 	gpos=self.global_position		
 	if is_in_image(pos):

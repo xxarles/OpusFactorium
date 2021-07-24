@@ -48,6 +48,9 @@ func move_background(delta):
 			glyphs[key].global_position += delta
 			already_done.append(glyphs[key])
 	
+func get_real_tile(pos):
+	return world_to_map(pos-self.position)
+
 func get_real_mouse_position():
 	return self.world_to_map(get_global_mouse_position()-self.position)
 	

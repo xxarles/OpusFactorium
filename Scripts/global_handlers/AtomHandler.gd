@@ -9,8 +9,11 @@ func add_atom(atom, type = "mouse"):
 	var tile_pos
 	if type == "mouse":
 		tile_pos = glob.get_real_mouse_position()
+	if type == "arm":
+		tile_pos = glob.get_real_tile(atom.global_position + Vector2(20,20))
+		print("drop tile pos ", tile_pos)
 	else:
-		tile_pos = glob.world_to_map(atom.global_position + Vector2(20,20))
+		tile_pos = glob.get_real_tile(atom.global_position + Vector2(20,20))
 	
 	if glob.check_vec_in_list(tile_pos, glob.get_all_non_glyph_tiles()):
 		if not atom.tile_pos:

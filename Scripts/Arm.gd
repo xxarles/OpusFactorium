@@ -180,7 +180,7 @@ func _on_Tween_tween_step(object, key, elapsed, value):
 
 func _on_Tween_tween_completed(object, key):
 	for atom in grabbed_atoms:
-		atom.dropped("arm_move")
+		atom.arm_release()
 	release_atoms()
 	get_ring_positions()
 	
