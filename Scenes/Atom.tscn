@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scripts/Atom.gd" type="Script" id=1]
 [ext_resource path="res://assets/textures/atoms/shadow.png" type="Texture" id=2]
@@ -6,9 +6,17 @@
 [ext_resource path="res://assets/textures/atoms/salt_symbol.png" type="Texture" id=4]
 [ext_resource path="res://assets/textures/atoms/salt_diffuse.png" type="Texture" id=5]
 
+[sub_resource type="CircleShape2D" id=1]
+radius = 29.5131
+
 [node name="Atom" type="KinematicBody2D"]
+z_index = 2
 input_pickable = true
 script = ExtResource( 1 )
+atom_type = null
+status = null
+new = null
+offset_ = null
 
 [node name="Image" type="MarginContainer" parent="."]
 anchor_left = 0.5
@@ -68,3 +76,7 @@ stretch_mode = 4
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="AtomArea" type="CollisionShape2D" parent="."]
+position = Vector2( 36.8111, 37.1257 )
+shape = SubResource( 1 )

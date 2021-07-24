@@ -14,7 +14,7 @@ func add_arm(arm, type = "mouse"):
 	else:
 		tile_pos = glob.world_to_map(arm.global_position + Vector2(5,5))
 	
-	if tile_pos in glob.atoms or tile_pos in glob.arms or tile_pos in glob.tiles:
+	if glob.check_vec_in_list(tile_pos, glob.get_all_occupied_tiles()):
 		if not arm.tile_pos:
 			return false
 		else:

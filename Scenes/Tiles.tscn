@@ -179,5 +179,3 @@ cell_size = Vector2( 82, 71 )
 cell_custom_transform = Transform2D( 82, 0, 0, 71, 0, 0 )
 cell_half_offset = 0
 format = 1
-
-[connection signal="pos_changes" from="." to="." method="_on_Tiles_pos_changes"]

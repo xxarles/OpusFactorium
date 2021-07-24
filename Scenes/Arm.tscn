@@ -7,7 +7,7 @@
 radius = 26.1157
 
 [node name="Arm" type="KinematicBody2D"]
-z_index = 3
+z_index = 4
 input_pickable = true
 script = ExtResource( 2 )
 
@@ -24,7 +24,7 @@ __meta__ = {
 
 [node name="Tween" type="Tween" parent="."]
 
-[node name="Collision" type="CollisionShape2D" parent="."]
+[node name="ArmPickArea" type="CollisionShape2D" parent="."]
 position = Vector2( 36.7695, 36.0624 )
 shape = SubResource( 1 )
 

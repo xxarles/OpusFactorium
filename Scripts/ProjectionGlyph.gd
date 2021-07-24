@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 
 var direction = 0
-var tile_pos
+var tile_pos = false
 var all_tiles
 var status
 var glob
@@ -15,6 +15,7 @@ var new = true
 var dropped_once = false
 var mpos
 var handler
+var orig_z
 
 
 # Called when the node enters the scene tree for the first time.
@@ -22,6 +23,7 @@ func _ready():
 	glob = get_node("/root/GlobalVariables")
 	handler = get_node("/root/ProjectionGlyphHandler")
 	gpos = self.global_position
+	orig_z = self.z_index
 
 
 func _process(delta):
@@ -40,20 +42,10 @@ func get_proper_rect(ctrl_node):
 	gpos=ctrl_node.global_position
 	return Rect2(gpos.x, gpos.y, tsize.x, tsize.y)
 		
-func is_in_image(pos):
-	var space_state = $MyArea.get_world_2d().direct_space_state
-	var result = space_state.intersect_point(pos)
-	for x in result:
-		if x["collider_id"] == self.get_instance_id():
-			return true
-	
-	
-	#return true
-	return false
-
 func dropped():
 	#ADD YOUR TILE 
 	status="released"
+	self.z_index = orig_z
 	dropped_once = true
 	if not handler.add_projection_glyph(self):
 		self.queue_free()
@@ -61,11 +53,19 @@ func dropped():
 func set_position_with_offset(pos):
 	self.global_position = pos + offset_tile
 
+func is_in_image(pos):
+	var space_state = $ProjectionGlyphArea.get_world_2d().direct_space_state
+	var result = space_state.intersect_point(pos)
+	if len(result)==1:
+		if result[-1]["collider_id"] == self.get_instance_id():
+			return true
+	return false
 
 func grabbed(pos):
 	if is_in_image(pos):
 		status="clicked"
 		offset_=gpos-pos
+		self.z_index = 1000
 		handler.remove_tile(all_tiles)
 	
 	###REMOVE TILEglob.remove_arm(self.tile_pos)

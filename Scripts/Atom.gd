@@ -24,6 +24,7 @@ var tile_pos = false
 var glob
 var handler
 var spriterect
+var orig_z
 
 
 # Called when the node enters the scene tree for the first time.
@@ -34,8 +35,10 @@ func _ready():
 	set_process_input(true)
 	set_process(true)
 	update_rect()
+	new = true
 	
 	update_type(all_types[val])
+	orig_z = self.z_index
 	
 func update_type(new_type):
 	if new_type == atom_type:
@@ -86,8 +89,9 @@ func _process(delta):
 		if debug:
 			debug=delta
 			debug=false
-		position = get_global_mouse_position() + offset_
+		#position = get_global_mouse_position() + offset_
 		#self.global_position = offset_
+		self.global_position = get_global_mouse_position() + offset_
 		
 	elif new:
 		offset_ = position - get_global_mouse_position()
@@ -107,17 +111,27 @@ func dropped(type="mouse"):
 	else:
 		pass
 	update_rect()
+	self.z_index = orig_z
 	status="released"
 
 func update_rect():
 	gpos=self.global_position
 	spriterect = Rect2(gpos.x, gpos.y, tsize.x, tsize.y)
-	
+
+
+func is_in_image(pos):
+	var space_state = $AtomArea.get_world_2d().direct_space_state
+	var result = space_state.intersect_point(pos)
+	for x in result:
+		if x["collider_id"] == self.get_instance_id():
+			return true
+	return false
 func grabbed(pos):
 	gpos=self.global_position		
-	if spriterect.has_point(pos):
+	if is_in_image(pos):
 		status="clicked"
 		offset_=gpos-pos
+		self.z_index = 1000
 		handler.remove_atom(self)
 
 func remove_self():

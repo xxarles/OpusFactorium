@@ -12,12 +12,13 @@ func add_atom(atom, type = "mouse"):
 	else:
 		tile_pos = glob.world_to_map(atom.global_position + Vector2(20,20))
 	
-	if tile_pos in glob.atoms or tile_pos in glob.arms or tile_pos in glob.tiles:
+	if glob.check_vec_in_list(tile_pos, glob.get_all_non_glyph_tiles()):
 		if not atom.tile_pos:
 			return false
 		else:
 			tile_pos = atom.tile_pos
-			
+	
+	
 	atom.tile_pos = tile_pos
 	atom.set_position_with_offset(glob.get_screen_position(tile_pos))
 	glob.atoms[tile_pos] = atom

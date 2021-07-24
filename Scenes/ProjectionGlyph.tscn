@@ -8,7 +8,7 @@
 [node name="ProjectionGlyph" type="KinematicBody2D"]
 script = ExtResource( 4 )
 
-[node name="MyArea" type="CollisionPolygon2D" parent="."]
+[node name="ProjectionGlyphArea" type="CollisionPolygon2D" parent="."]
 z_index = 4
 polygon = PoolVector2Array( 41.6286, 1.20728, 80.9566, 25.1188, 123.116, -0.365845, 163.388, 23.231, 164.332, 71.3686, 124.06, 93.3923, 83.159, 69.1662, 42.8871, 94.0216, 2.30048, 70.7393, 2.30048, 25.748 )
 

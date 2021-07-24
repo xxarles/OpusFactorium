@@ -24,6 +24,7 @@ var spriterect
 var tile_pos = false
 export var arms = 1
 export var arm_length = 1
+var orig_z
 
 var map_reach = null
 var grabbed_atoms = []
@@ -36,6 +37,8 @@ func _ready():
 	handler = get_node("/root/ArmHandler")
 	tween_rotation = get_node("Tween")
 	tsize = $PickArea.get_size()
+	orig_z = self.z_index
+
 	pass # Replace with function body.
 	
 	
@@ -107,6 +110,7 @@ func dropped():
 		self.queue_free()
 	update_rect()
 	update_reach_maps()	
+	self.z_index = orig_z
 	status="released"
 
 
@@ -114,11 +118,20 @@ func update_rect():
 	gpos=self.global_position
 	spriterect = Rect2(gpos.x, gpos.y, tsize.x, tsize.y)
 
+func is_in_image(pos):
+	var space_state = $ArmPickArea.get_world_2d().direct_space_state
+	var result = space_state.intersect_point(pos)
+
+	for x in result:
+		if x["collider_id"] == self.get_instance_id():
+			return true
+	return false
 
 func grabbed(pos):
-	if spriterect.has_point(pos):
+	if is_in_image(pos):
 		status="clicked"
 		offset_=gpos-pos
+		self.z_index = 1000
 		handler.remove_arm(self.tile_pos)
 	
 

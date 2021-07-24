@@ -2,7 +2,8 @@ extends TileMap
 
 var atoms = {}
 var arms = {}
-var tiles = {}
+var glyphs = {}
+var status
 
 func _ready():
 	self.cell_half_offset = 3
@@ -42,16 +43,51 @@ func move_background(delta):
 		atoms[key].global_position += delta
 	for key in arms:
 		arms[key].global_position += delta
-	for key in tiles:
-		if not tiles[key] in already_done:
-			tiles[key].global_position += delta
-			already_done.append(tiles[key])
+	for key in glyphs:
+		if not glyphs[key] in already_done:
+			glyphs[key].global_position += delta
+			already_done.append(glyphs[key])
 	
 func get_real_mouse_position():
 	return self.world_to_map(get_global_mouse_position()-self.position)
 	
 func get_screen_position(tile_pos):
 	return self.map_to_world(tile_pos)+self.position
+
+func get_all_occupied_tiles():
+	return atoms.keys() + arms.keys() + glyphs.keys()
+
+func get_all_non_glyph_tiles():
+	return arms.keys() + atoms.keys()
+
+func get_all_non_atom_tiles():
+	# print("arms keys?", arms.keys())
+	# print("glyph keys?", glyphs.keys())
+	# print("all_keys?", arms.keys()+glyphs.keys())
+	return arms.keys() + glyphs.keys()
+	
+func check_vec_in_list(vec, vec_list):
+	for x in vec_list:
+		if vec.is_equal_approx(x):
+			return true
+	return false
+
+func get_all_collisions(pos):
+	pass
+	var space_state = self.get_world_2d().direct_space_state
+	return space_state.intersect_point(pos)
+
+func _input(ev):
+	if ev is InputEventMouseButton  and ev.button_index == BUTTON_LEFT and ev.is_pressed() and status!="dragging":
+		print(get_all_collisions(ev.position))
+	
+	if status=="clicked" and ev is InputEventMouseButton:
+		status="dragging"
+
+	if status=="dragging" and ev is InputEventMouseButton  and ev.button_index == BUTTON_LEFT:
+		if not ev.is_pressed():
+			status = "released"
+	
 
 
 
